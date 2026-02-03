@@ -36,7 +36,7 @@ export function Hero() {
         </div>
 
         <Badge variant="secondary" className="mb-6 text-sm py-2 px-4 bg-amber-500/20 text-amber-400 border-amber-500/30 backdrop-blur-sm">
-          🥊 Matrícula GRATIS · Plazas Limitadas
+          Matrícula GRATIS · Plazas Limitadas
         </Badge>
 
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight mb-6 text-white">
@@ -58,7 +58,7 @@ export function Hero() {
             className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold text-lg px-8 py-6 shadow-lg shadow-amber-500/25 transition-all duration-300 hover:scale-105"
           >
             <Link href="#contacto">
-              🥊 Reserva tu Clase de Prueba GRATIS
+              Reserva tu Clase de Prueba GRATIS
             </Link>
           </Button>
           <Button

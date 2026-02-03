@@ -3,13 +3,21 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Swords, Flame, Shield, Trophy, Zap } from "lucide-react";
 import Link from "next/link";
+
+const iconMap: Record<string, typeof Swords> = {
+  boxeo: Swords,
+  muaythai: Flame,
+  mma: Trophy,
+  jkd: Zap,
+  bjj: Shield,
+};
 
 const pricingCategories = [
   {
     category: "Boxeo",
-    icon: "🥊",
+    iconKey: "boxeo",
     plans: [
       { days: "2 días/semana", price: 58 },
       { days: "3 días/semana", price: 63, popular: true },
@@ -18,7 +26,7 @@ const pricingCategories = [
   },
   {
     category: "Boxeo Juvenil",
-    icon: "🥊",
+    iconKey: "boxeo",
     isYouth: true,
     plans: [
       { days: "L/M o M/J", price: 50 },
@@ -27,7 +35,7 @@ const pricingCategories = [
   },
   {
     category: "Muay Thai / K1 / Kick Boxing",
-    icon: "🦵",
+    iconKey: "muaythai",
     plans: [
       { days: "2 días/semana", price: 58 },
       { days: "3 días/semana", price: 63, popular: true },
@@ -36,7 +44,7 @@ const pricingCategories = [
   },
   {
     category: "Kick Boxing Juvenil",
-    icon: "🦵",
+    iconKey: "muaythai",
     isYouth: true,
     plans: [
       { days: "M/J", price: 60 },
@@ -44,7 +52,7 @@ const pricingCategories = [
   },
   {
     category: "MMA",
-    icon: "🏆",
+    iconKey: "mma",
     plans: [
       { days: "L/X 11-12h", price: 60 },
       { days: "L/X/V 20-21h", price: 65, popular: true },
@@ -52,14 +60,14 @@ const pricingCategories = [
   },
   {
     category: "Jeet Kune Do",
-    icon: "⚡",
+    iconKey: "jkd",
     plans: [
       { days: "M/J 19:30-21h", price: 65 },
     ],
   },
   {
     category: "BJJ / Jiu-Jitsu",
-    icon: "🤼",
+    iconKey: "bjj",
     plans: [
       { days: "2 días/semana", price: 60 },
       { days: "3 días/semana", price: 65, popular: true },
@@ -68,7 +76,7 @@ const pricingCategories = [
   },
   {
     category: "Jiu-Jitsu Infantil",
-    icon: "🤼",
+    iconKey: "bjj",
     isYouth: true,
     plans: [
       { days: "3 días/semana", price: 55 },
@@ -76,7 +84,7 @@ const pricingCategories = [
   },
   {
     category: "Jiu-Jitsu Defensa Personal",
-    icon: "🛡️",
+    iconKey: "bjj",
     plans: [
       { days: "3 días/semana", price: 63 },
     ],
@@ -100,18 +108,22 @@ export function Pricing() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pricingCategories.map((category, idx) => (
+          {pricingCategories.map((category, idx) => {
+            const Icon = iconMap[category.iconKey] || Swords;
+            return (
             <Card
               key={idx}
-              className={`bg-card border-border hover:border-primary/50 transition-colors ${
-                category.isYouth ? "bg-gradient-to-br from-card to-primary/5" : ""
+              className={`bg-zinc-900/50 border-zinc-800 hover:border-amber-500/50 transition-all duration-300 ${
+                category.isYouth ? "bg-gradient-to-br from-zinc-900/50 to-amber-500/5" : ""
               }`}
             >
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <span className="text-2xl">{category.icon}</span>
-                    <span className="text-lg">{category.category}</span>
+                  <CardTitle className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-amber-500/10">
+                      <Icon className="h-5 w-5 text-amber-500" />
+                    </div>
+                    <span className="text-lg text-white">{category.category}</span>
                   </CardTitle>
                   {category.isYouth && (
                     <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
@@ -127,45 +139,47 @@ export function Pricing() {
                       key={planIdx}
                       className={`flex items-center justify-between p-3 rounded-lg ${
                         plan.popular
-                          ? "bg-primary/20 border border-primary/30"
-                          : "bg-secondary/30"
+                          ? "bg-amber-500/20 border border-amber-500/30"
+                          : "bg-zinc-800/50"
                       }`}
                     >
                       <div className="flex items-center gap-2">
-                        {plan.popular && <Star className="h-4 w-4 text-primary" />}
-                        <span className="text-sm">{plan.days}</span>
+                        {plan.popular && <Star className="h-4 w-4 text-amber-500 fill-amber-500" />}
+                        <span className="text-sm text-zinc-300">{plan.days}</span>
                       </div>
-                      <div className="font-bold text-lg">
-                        {plan.price}€<span className="text-xs text-muted-foreground">/mes</span>
+                      <div className="font-bold text-lg text-white">
+                        {plan.price}€<span className="text-xs text-zinc-500">/mes</span>
                       </div>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
-          ))}
+          );})}
         </div>
 
         {/* Benefits */}
         <div className="mt-12 grid md:grid-cols-4 gap-6">
           {[
-            { icon: "🎁", text: "Matrícula GRATIS" },
-            { icon: "🥊", text: "Primera clase de prueba GRATIS" },
-            { icon: "👥", text: "Grupos reducidos" },
-            { icon: "🏆", text: "Preparación para competición" },
+            { Icon: Check, text: "Matrícula GRATIS" },
+            { Icon: Swords, text: "Primera clase de prueba GRATIS" },
+            { Icon: Shield, text: "Grupos reducidos" },
+            { Icon: Trophy, text: "Preparación para competición" },
           ].map((benefit, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-3 p-4 bg-card rounded-lg border border-border"
+              className="flex items-center gap-3 p-4 bg-zinc-900/50 rounded-lg border border-zinc-800 hover:border-amber-500/30 transition-colors"
             >
-              <span className="text-2xl">{benefit.icon}</span>
-              <span className="font-medium">{benefit.text}</span>
+              <div className="p-2 rounded-lg bg-amber-500/10">
+                <benefit.Icon className="h-5 w-5 text-amber-500" />
+              </div>
+              <span className="font-medium text-white">{benefit.text}</span>
             </div>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <Button asChild size="lg" className="bg-primary hover:bg-primary/90 animate-pulse-glow">
+          <Button asChild size="lg" className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold shadow-lg shadow-amber-500/25 transition-all duration-300 hover:scale-105">
             <Link href="#contacto">
               Reservar Clase de Prueba GRATIS
             </Link>

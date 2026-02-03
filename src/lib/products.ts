@@ -140,12 +140,12 @@ export const products: Product[] = [
 ];
 
 export const categories = [
-  { id: "all", name: "Todo", icon: "🛒" },
-  { id: "guantes", name: "Guantes", icon: "🥊" },
-  { id: "vendas", name: "Vendas", icon: "🩹" },
-  { id: "ropa", name: "Ropa", icon: "👕" },
-  { id: "equipamiento", name: "Equipamiento", icon: "🎯" },
-  { id: "protecciones", name: "Protecciones", icon: "🛡️" },
+  { id: "all", name: "Todo" },
+  { id: "guantes", name: "Guantes" },
+  { id: "vendas", name: "Vendas" },
+  { id: "ropa", name: "Ropa" },
+  { id: "equipamiento", name: "Equipamiento" },
+  { id: "protecciones", name: "Protecciones" },
 ];
 
 export function getProductById(id: string): Product | undefined {
