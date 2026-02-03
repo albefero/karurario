@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -17,13 +18,22 @@ const navItems = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+  const navigateToSection = (id: string) => {
     setIsOpen(false);
+    
+    // If we're not on the home page, navigate there first
+    if (pathname !== "/") {
+      router.push(`/#${id}`);
+    } else {
+      // If on home page, just scroll
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   return (
@@ -47,14 +57,17 @@ export function Navbar() {
             {navItems.map((item) => (
               <button
                 key={item.href}
-                onClick={() => scrollToSection(item.href)}
+                onClick={() => navigateToSection(item.href)}
                 className="text-sm font-medium text-zinc-400 hover:text-amber-500 transition-colors"
               >
                 {item.label}
               </button>
             ))}
+            <Link href="/tienda" className="text-sm font-medium text-zinc-400 hover:text-amber-500 transition-colors">
+              Tienda
+            </Link>
             <Button 
-              onClick={() => scrollToSection("contacto")}
+              onClick={() => navigateToSection("contacto")}
               className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold"
             >
               Clase GRATIS
@@ -73,14 +86,21 @@ export function Navbar() {
                 {navItems.map((item) => (
                   <button
                     key={item.href}
-                    onClick={() => scrollToSection(item.href)}
+                    onClick={() => navigateToSection(item.href)}
                     className="text-lg font-medium text-zinc-400 hover:text-amber-500 transition-colors text-left"
                   >
                     {item.label}
                   </button>
                 ))}
+                <Link 
+                  href="/tienda" 
+                  onClick={() => setIsOpen(false)}
+                  className="text-lg font-medium text-zinc-400 hover:text-amber-500 transition-colors"
+                >
+                  Tienda
+                </Link>
                 <Button 
-                  onClick={() => scrollToSection("contacto")}
+                  onClick={() => navigateToSection("contacto")}
                   className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold mt-4"
                 >
                   Clase GRATIS
