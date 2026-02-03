@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -18,22 +18,33 @@ const navItems = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
   const pathname = usePathname();
+  const isHome = pathname === "/";
 
-  const navigateToSection = (id: string) => {
+  // Handle hash scrolling after navigation
+  useEffect(() => {
+    if (isHome && window.location.hash) {
+      const id = window.location.hash.slice(1);
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
+    }
+  }, [isHome]);
+
+  const handleNavClick = (id: string) => {
     setIsOpen(false);
     
-    // If we're not on the home page, navigate there first
-    if (pathname !== "/") {
-      router.push(`/#${id}`);
-    } else {
-      // If on home page, just scroll
+    if (isHome) {
+      // On home page, just scroll
       const element = document.getElementById(id);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }
+    // If not on home, the Link will navigate to /#id
   };
 
   return (
@@ -55,23 +66,25 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <button
+              <Link
                 key={item.href}
-                onClick={() => navigateToSection(item.href)}
+                href={`/#${item.href}`}
+                onClick={() => handleNavClick(item.href)}
                 className="text-sm font-medium text-zinc-400 hover:text-amber-500 transition-colors"
               >
                 {item.label}
-              </button>
+              </Link>
             ))}
             <Link href="/tienda" className="text-sm font-medium text-zinc-400 hover:text-amber-500 transition-colors">
               Tienda
             </Link>
-            <Button 
-              onClick={() => navigateToSection("contacto")}
-              className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold"
+            <Link 
+              href="/#contacto"
+              onClick={() => handleNavClick("contacto")}
+              className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold px-4 py-2 rounded-md"
             >
               Clase GRATIS
-            </Button>
+            </Link>
           </div>
 
           {/* Mobile Navigation */}
@@ -84,13 +97,14 @@ export function Navbar() {
             <SheetContent side="right" className="bg-zinc-900 border-zinc-800">
               <div className="flex flex-col gap-6 mt-8">
                 {navItems.map((item) => (
-                  <button
+                  <Link
                     key={item.href}
-                    onClick={() => navigateToSection(item.href)}
-                    className="text-lg font-medium text-zinc-400 hover:text-amber-500 transition-colors text-left"
+                    href={`/#${item.href}`}
+                    onClick={() => handleNavClick(item.href)}
+                    className="text-lg font-medium text-zinc-400 hover:text-amber-500 transition-colors"
                   >
                     {item.label}
-                  </button>
+                  </Link>
                 ))}
                 <Link 
                   href="/tienda" 
@@ -99,12 +113,13 @@ export function Navbar() {
                 >
                   Tienda
                 </Link>
-                <Button 
-                  onClick={() => navigateToSection("contacto")}
-                  className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold mt-4"
+                <Link 
+                  href="/#contacto"
+                  onClick={() => handleNavClick("contacto")}
+                  className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-bold px-4 py-3 rounded-md text-center mt-4"
                 >
                   Clase GRATIS
-                </Button>
+                </Link>
               </div>
             </SheetContent>
           </Sheet>
